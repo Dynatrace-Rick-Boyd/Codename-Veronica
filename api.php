@@ -88,11 +88,33 @@ abstract class API
 	
 	public function processAPI() {
 		
+		if($this->endpoint == 'Californication') {
+			return $this->_response("YES");
+		}
+		return $this->_response("I only understand Californication");
+		
 		return $this->_response("Movie title: $this->endpoint");
 		if ((int)method_exists($this, $this->endpoint) > 0) {
 			return $this->_response($this->{$this->endpoint}($this->args));
 		}
 		return $this->_response("No Endpoint: $this->endpoint", 404);
+	}
+	
+	private function getMovie($movie) {
+		// create curl resource
+		$ch = curl_init();
+		
+		// set url
+		curl_setopt($ch, CURLOPT_URL, "example.com");
+		
+		//return the transfer as a string
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		
+		// $output contains the output string
+		$output = curl_exec($ch);
+		
+		// close curl resource to free up system resources
+		curl_close($ch);
 	}
 	
 	private function _response($data, $status = 200) {
